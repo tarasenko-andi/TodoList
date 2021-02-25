@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ToDoList.Views.TodoListPage"
+             xmlns:constans="clr-namespace:ToDoList">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="+" Clicked="OnAddItemClicked">
+            <ToolbarItem.IconImageSource>
+                <OnPlatform x:TypeArguments="ImageSource">
+                    <On Platform="Android, UWP" Value="plus.png" />
+                </OnPlatform>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <constans:ConverterState x:Key="stateConverter"/>
+            <constans:StatusConverter x:Key="statusConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid BackgroundColor="White" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Frame Grid.Row="0" Margin="5,0,5,0" CornerRadius="5" HasShadow="True">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Имя" Grid.Row="0" Grid.Column="0" HorizontalOptions="Fill">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeSortedTypeCommand}" CommandParameter="1"/>
+                        </Label.GestureRecognizers>
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding ChangeState, Converter={StaticResource stateConverter}, ConverterParameter=1}" Value="10">
+                                <Setter Property="Text" Value="Имя↓"/>
+                                <Setter Property="BackgroundColor" Value="Green"/>
+                                <Setter Property="TextColor" Value="White"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ChangeState, Converter={StaticResource stateConverter}, ConverterParameter=1}" Value="11">
+                                <Setter Property="Text" Value="Имя↑"/>
+                                <Setter Property="BackgroundColor" Value="Yellow"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ChangeState, Converter={StaticResource stateConverter}, ConverterParameter=1}" Value="0">
+                                <Setter Property="Text" Value="Имя"/>
+                                <Setter Property="BackgroundColor" Value="White"/>
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <Label  Grid.Row="1" Text="E-mail" Grid.Column="0"  HorizontalOptions="Fill">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeSortedTypeCommand}" CommandParameter="2"/>
+                        </Label.GestureRecognizers>
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding ChangeState, Converter={StaticResource stateConverter}, ConverterParameter=2}" Value="20">
+                                <Setter Property="Text" Value="Email ↓"/>
+                                <Setter Property="BackgroundColor" Value="Green"/>
+                                <Setter Property="TextColor" Value="White"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ChangeState, Converter={StaticResource stateConverter}, ConverterParameter=2}" Value="21">
+                                <Setter Property="Text" Value="Email ↑"/>
+                                <Setter Property="BackgroundColor" Value="Yellow"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ChangeState, Converter={StaticResource stateConverter}, ConverterParameter=2}" Value="0">
+                                <Setter Property="Text" Value="Email"/>
+                                <Setter Property="BackgroundColor" Value="White"/>
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <Label  Grid.Row="2" Text="Текст задачи" Grid.Column="0"  HorizontalOptions="Fill"/>
+                    <Label Text="Cтатус" Grid.Column="1" Grid.Row="2" VerticalOptions="End">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeSortedTypeCommand}" CommandParameter="3"/>
+                        </Label.GestureRecognizers>
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding ChangeState, Converter={StaticResource stateConverter}, ConverterParameter=3}" Value="30">
+                                <Setter Property="Text" Value="Cтатус ↓"/>
+                                <Setter Property="BackgroundColor" Value="Green"/>
+                                <Setter Property="TextColor" Value="White"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ChangeState, Converter={StaticResource stateConverter}, ConverterParameter=3}" Value="31">
+                                <Setter Property="Text" Value="Cтатус ↑"/>
+                                <Setter Property="BackgroundColor" Value="Yellow"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ChangeState, Converter={StaticResource stateConverter}, ConverterParameter=3}" Value="0">
+                                <Setter Property="Text" Value="Cтатус"/>
+                                <Setter Property="BackgroundColor" Value="White"/>
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <Label Text="Редакт." Grid.Column="2" Grid.Row="2" VerticalOptions="End"/>
+                </Grid>
+            </Frame>
+            
+            <ListView Grid.Row="1" x:Name="listView" 
+              ItemsSource="{Binding Items}" HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame Margin="5" CornerRadius="5" HasShadow="True">
+                                <Grid ColumnSpacing="0" VerticalOptions="StartAndExpand">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
+                                    </Grid.GestureRecognizers>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20*"/>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="4*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Text="{Binding UserName}" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" HorizontalOptions="Start" />
+                                    <Label Text="{Binding Email}" Grid.Row="1" Grid.Column="0" VerticalTextAlignment="Center"  HorizontalOptions="Start"/>
+                                    <Label Text="{Binding Text}" Grid.Row="2"  Grid.Column="0" VerticalTextAlignment="Center"  HorizontalOptions="Start"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" VerticalOptions="CenterAndExpand" IsChecked="{Binding Status, Converter={StaticResource statusConverter}, ConverterParameter=Execute}" IsEnabled="False" HorizontalOptions="Center"/>
+                                    <CheckBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" VerticalOptions="CenterAndExpand" IsChecked="{Binding Status, Converter={StaticResource statusConverter}, ConverterParameter=AdminEdit}" IsEnabled="False" HorizontalOptions="Center"/>
+                                </Grid>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <StackLayout Grid.Row="2" HorizontalOptions="CenterAndExpand" Orientation="Horizontal">
+                <Frame BackgroundColor="LightGreen">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                        <Picker ItemsSource="{Binding PagesCheckList}" SelectedItem="{Binding CurrentPage, Mode=TwoWay}" x:Name="pagePicker"/>
+                        <Label Text="{Binding PagesCount, StringFormat=' / {0}'}" VerticalOptions="Center"/>
+                    </StackLayout>
+                </Frame>
+                <Button Text="Войти" Clicked="TapGestureRecognizer_Tapped3" HorizontalOptions="EndAndExpand" BackgroundColor="LightGreen">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button" Binding="{Binding IsAdmin}" Value="True">
+                            <Setter Property="Text" Value="Выйти"/>
+                            <Setter Property="BackgroundColor" Value="LightBlue"/>
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+            </StackLayout>
+            <Grid Grid.Row="0" Grid.RowSpan="3" IsVisible="{Binding AdminFormEnable}">
+                <StackLayout Opacity="0.5" HorizontalOptions="Fill" BackgroundColor="Black">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+                <Frame HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" BackgroundColor="LightBlue" WidthRequest="300" Opacity="1">
+                    <StackLayout>
+                        <Label Text="Autorization" HorizontalOptions="Center"/>
+                        <Entry Placeholder="Логин" Text="{Binding Login, Mode=TwoWay}"/>
+                        <Entry Placeholder="Пароль" Text="{Binding Password, Mode=TwoWay}" IsPassword="True"/>
+                        <Button Text="Войти" Command="{Binding LoginingCommand}"/>
+                    </StackLayout>
+                </Frame>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

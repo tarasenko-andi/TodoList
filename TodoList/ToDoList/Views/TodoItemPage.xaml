@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ToDoList.Views.TodoItemPage"
+             xmlns:constans="clr-namespace:ToDoList">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <constans:ConverterState x:Key="stateConverter"/>
+            <constans:StatusConverter x:Key="statusConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout Margin="20">
+        <Label Text="Name" />
+        <Entry Text="{Binding UserName, Mode=TwoWay}" 
+               Placeholder="Enter item"
+               IsEnabled="{Binding IsNew}"/>
+        <Label Text="Email" />
+        <Entry Text="{Binding Email, Mode=TwoWay}" 
+               Placeholder="Enter email"
+               IsEnabled="{Binding IsNew}"/>
+        <Label Text="Task"/>
+        <Entry Text="{Binding Text, Mode=TwoWay}"
+               Placeholder="Enter notes"/>
+        <Label Text="Done" IsVisible="{Binding IsAdmin}"/>
+        <Switch IsToggled="{Binding Status, Converter={StaticResource statusConverter}, ConverterParameter=Execute}" IsEnabled="{Binding IsAdmin}" IsVisible="{Binding IsAdmin}" x:Name="IsExecute_Switch"/>
+        <Button Text="Save" 
+                Clicked="OnSaveButtonClicked" />
+        <Button Text="Cancel" 
+                Clicked="OnCancelButtonClicked" />
+    </StackLayout>
+</ContentPage>
