@@ -108,12 +108,12 @@ namespace ToDoList.Data
                 return false;
             }
         }
-        public async Task<bool> UpdateTodoItemAsync(TodoItem item)
+        public async Task<bool> UpdateTodoItemAsync(TodoItem item, Status itemStatus)
         {
             var nvc = new List<KeyValuePair<string, string>>();
             nvc.Add(new KeyValuePair<string, string>("token", Preferences.Get("token", "")));
             nvc.Add(new KeyValuePair<string, string>("text", item.text));
-            nvc.Add(new KeyValuePair<string, string>("status", ((int)(item.status)).ToString()));
+            nvc.Add(new KeyValuePair<string, string>("status", ((int)(itemStatus)).ToString()));
             try
             {
                 string url = Constants.UpdateTask(item.id);
@@ -121,7 +121,7 @@ namespace ToDoList.Data
                 var res = client.SendAsync(req);
                 status = await res.Result.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<AddItemResponse>(status).status;
-                return result == "Ok";
+                return result == "ok";
             }
             catch (Exception ex)
             {

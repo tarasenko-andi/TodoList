@@ -12,6 +12,6 @@ namespace ToDoList.Data
 		Task<bool> SaveTodoItemAsync(TodoItem item, bool isNewItem);
 
 		Task<bool> Logining(string login, string password);
-		Task<bool> UpdateTodoItemAsync(TodoItem item);
+		Task<bool> UpdateTodoItemAsync(TodoItem item, Status itemStatus);
 	}
 }

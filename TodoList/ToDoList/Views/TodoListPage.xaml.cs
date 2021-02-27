@@ -5,6 +5,7 @@ using ToDoList.ViewModels;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using static ToDoList.Constants;
 
 namespace ToDoList.Views
 {
@@ -18,11 +19,12 @@ namespace ToDoList.Views
 			BindingContext = viewModel;
 			Appearing += TodoListPage_Appearing;
 			InitializeComponent();
+			viewModel.ChangeSortedType("3");
 		}
 
         private void TodoListPage_Appearing(object sender, EventArgs e)
         {
-			App.TodoStore.Dispatch(new UpdateTodoAction());
+			App.TodoStore.Dispatch(new UpdateTodoListAction());
         }
 
         async void OnAddItemClicked(object sender, EventArgs e)

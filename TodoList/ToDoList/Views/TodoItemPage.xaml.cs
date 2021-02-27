@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using ToDoList.Actions;
 using ToDoList.State;
 using ToDoList.ViewModels;
 using Xamarin.Forms;
@@ -39,7 +40,9 @@ namespace ToDoList.Views
             }
             if (todoItem.IsNew)
             {
-				if (await App.TodoManager.SaveTaskAsync(todoItem.TodoItem, isNewItem))
+				var adTodo = new AddTodoAction(todoItem.UserName, todoItem.Email, todoItem.Text, todoItem.Status, todoItem.IsNew);
+				App.TodoStore.Dispatch(adTodo);
+				if (adTodo.Result)
 				{
 					await DisplayAlert("Успешно", "Сохранение данных прошло успешно", "ОК");
 				}
@@ -48,12 +51,22 @@ namespace ToDoList.Views
 					await DisplayAlert("Ошибка", "Ошибка сохранения данных", "ОК");
 					return;
 				}
-
             }
             else
             {
-				TodoItem.ChangeStatus(todoItem.TodoItem, todoItem.Text != startedItem.Text, IsExecute_Switch.IsToggled);
-				await App.TodoManager.UpdateTodoItemAsync(todoItem.TodoItem);
+				bool adminEdit = startedItem.Text != todoItem.Text;
+				var adTodo = new UpdateTodoAction(todoItem.TodoItem, adminEdit, IsExecute_Switch.IsToggled);
+				App.TodoStore.Dispatch(adTodo);
+				if (adTodo.Result)
+				{
+					await DisplayAlert("Успешно", "Сохранение данных прошло успешно", "ОК");
+				}
+				else
+				{
+					await DisplayAlert("Ошибка", "Ошибка сохранения данных", "ОК");
+					return;
+				}
+
 			}
 			await Navigation.PopAsync();
 		}

@@ -13,16 +13,18 @@ namespace ToDoList.State
 		public string text { get; set; }
 
 		public Status status { get; set; }
-        public static void ChangeStatus(TodoItem item, bool editAdmin, bool execute)
+        public static Status ChangeStatus(TodoItem item, bool editAdmin, bool execute)
         {
             if (!editAdmin && !execute)
-                item.status = Status.NoExecute;
+                return Status.NoExecute;
             else if (editAdmin && !execute)
-                item.status = Status.NoExecuteAndAdminCheck;
+                return Status.NoExecuteAndAdminCheck;
             else if (!editAdmin && (execute || item.status == Status.Execute))
-                item.status = Status.Execute;
+                return Status.Execute;
             else if (editAdmin && (execute || item.status == Status.ExecuteAndAdminCheck))
-                item.status = Status.ExecuteAndAdminCheck;
+                return Status.ExecuteAndAdminCheck;
+            else
+                return Status.NoExecute;
         }
     }
 	public enum Status { NoExecute, NoExecuteAndAdminCheck, Execute = 10, ExecuteAndAdminCheck = 11 };

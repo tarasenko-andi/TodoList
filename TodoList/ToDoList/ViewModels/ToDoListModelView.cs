@@ -176,7 +176,7 @@ namespace ToDoList.ViewModels
             }
             ChangeState = Int32.Parse(((int)CurrentSortedField).ToString() + ((int)CurrentSortDirection).ToString());
             App.TodoStore.Dispatch(new SortedAction(CurrentPage, CurrentSortedField, CurrentSortDirection));
-            App.TodoStore.Dispatch(new UpdateTodoAction());
+            App.TodoStore.Dispatch(new UpdateTodoListAction());
         }
         //int changeState;
         public int ChangeState { get => Preferences.Get("ChangeState", 0);

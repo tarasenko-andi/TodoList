@@ -23,7 +23,11 @@ namespace ToDoList.Reducers
                         username = newTodo.username,
                         status = newTodo.status
                     };
-                    previousState.Todos.Add(todo);
+                    if(App.TodoManager.SaveTaskAsync(todo, newTodo.IsNew).Result)
+                    {
+                        newTodo.Result = true;
+                        previousState.Todos.Add(todo);
+                    }
                     break;
                 case SortedAction sortedAction:
                     previousState.CurrentSortDirection = sortedAction.SortDirection;
@@ -36,7 +40,6 @@ namespace ToDoList.Reducers
                 case AdminEditAction adminEditAction:
                     bool edit = adminEditAction.TodoItem.text != adminEditAction.Text;
                     TodoItem.ChangeStatus(adminEditAction.TodoItem, edit, adminEditAction.Completed);
-                    App.TodoManager.UpdateTodoItemAsync(adminEditAction.TodoItem).Wait();
                     break;
                 case UnlogingAction unloging:
                     previousState.IsAdmin = false;
@@ -51,7 +54,9 @@ namespace ToDoList.Reducers
                     previousState.Todos = response1.Item2;
                     previousState.CountPages = response1.pagesCount;
                     break;
-
+                case UpdateTodoAction updateTodoAction:
+                    updateTodoAction.Result = App.TodoManager.UpdateTodoItemAsync(updateTodoAction.TodoItem, TodoItem.ChangeStatus(updateTodoAction.TodoItem, updateTodoAction.AdminEdit, updateTodoAction.IsExecute)).Result;
+                    break;
                 default:
                     break;
             }

@@ -28,9 +28,9 @@ namespace ToDoList.Data
         {
 			return restService.Logining(login, password);
         }
-		public Task<bool> UpdateTodoItemAsync(TodoItem item)
+		public Task<bool> UpdateTodoItemAsync(TodoItem item, Status itemStatus)
         {
-			return restService.UpdateTodoItemAsync(item);
+			return restService.UpdateTodoItemAsync(item, itemStatus);
         }
 	}
 }
